@@ -1,13 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Login } from './login/login';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,Login],
+  imports: [RouterOutlet],
+   standalone: true,
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
- title : string = 'ov_ui';
+  protected title = 'ov_ui';
 }
