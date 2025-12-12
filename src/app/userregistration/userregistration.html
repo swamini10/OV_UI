@@ -1,0 +1,257 @@
+<div class="userregistration-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>User Registration</mat-card-title>
+      <mat-card-subtitle>Create your voting account</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Success Message -->
+      <div *if="successMessage" class="success-message">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ successMessage }}</span>
+      </div>
+
+      <!-- Error Message -->
+      <div *if="errorMessage" class="error-message">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+        <!-- Name Fields Row -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              formControlName="firstName"
+              placeholder="Enter first name"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error
+              *ngIf="registrationForm.get('firstName')?.hasError('required')"
+            >
+              First Name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Middle Name</mat-label>
+            <input
+              matInput
+              formControlName="middleName"
+              placeholder="Enter middle name"
+              [disabled]="loading"
+            />
+            <mat-error
+              *ngIf="registrationForm.get('middleName')?.hasError('required')"
+            >
+              Middle Name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Last Name</mat-label>
+            <input
+              matInput
+              formControlName="lastName"
+              placeholder="Enter last name"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error
+              *ngIf="registrationForm.get('lastName')?.hasError('required')"
+            >
+              Last Name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Email / aadhar , phone number-->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Email Id</mat-label>
+            <input
+              matInput
+              formControlName="emailId"
+              placeholder="Enter email id"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error
+              *ngIf="registrationForm.get('emailId')?.hasError('required')"
+            >
+              Email Id is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Aadhar Number</mat-label>
+            <input
+              matInput
+              formControlName="aadharNumber"
+              placeholder="Enter aadhar number"
+              [disabled]="loading"
+            />
+            <mat-error
+              *ngIf="registrationForm.get('aadharNumber')?.hasError('required')"
+            >
+              Aadhar Number is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Phone Number</mat-label>
+            <input
+              matInput
+              formControlName="phoneNo"
+              placeholder="Enter phone number"
+              [disabled]="loading"
+            />
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-error
+              *ngIf="registrationForm.get('phoneNo')?.hasError('required')"
+            >
+              Phone Number is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div style="width: 40%; border: 2px solid gray; padding: 16px;">
+          <h3>Address Details</h3>
+          <div
+            style="display: flex; flex-direction: row; gap: 16px"
+            formGroupName="address"
+          >
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Country</mat-label>
+                <mat-select
+                  formControlName="countryId"
+                  (selectionChange)="onCountryChange($event.value)"
+                >
+                  <mat-option *ngFor="let c of countries" [value]="c.id"
+                    >{{ c.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="address.get('countryId')?.hasError('required')"
+                  >Country is required</mat-error
+                >
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>State</mat-label>
+                <mat-select
+                  formControlName="stateId"
+                  (selectionChange)="onStateChange($event.value)"
+                >
+                  <mat-option *ngFor="let s of states" [value]="s.id"
+                    >{{ s.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="address.get('stateId')?.hasError('required')"
+                  >State is required</mat-error
+                >
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>City</mat-label>
+                <mat-select formControlName="cityId">
+                  <mat-option *ngFor="let ct of cities" [value]="ct.id"
+                    >{{ ct.name }}</mat-option
+                  >
+                </mat-select>
+                <mat-error *ngIf="address.get('cityId')?.hasError('required')"
+                  >City is required</mat-error
+                >
+              </mat-form-field>
+            </div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Street</mat-label>
+                <input
+                  matInput
+                  formControlName="street"
+                  placeholder="Street / Locality"
+                  [disabled]="loading"
+                />
+                <mat-error *ngIf="address.get('street')?.hasError('required')"
+                  >Street is required</mat-error
+                >
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Zip Code</mat-label>
+                <input
+                  matInput
+                  formControlName="zipCode"
+                  placeholder="6-digit zip code"
+                  [disabled]="loading"
+                />
+                <mat-error *ngIf="address.get('zipCode')?.hasError('required')"
+                  >Zip Code is required</mat-error
+                >
+                <mat-error *ngIf="address.get('zipCode')?.hasError('pattern')"
+                  >Enter a valid 6-digit zip code</mat-error
+                >
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- address save button -->
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="saveAddress()"
+            [disabled]="address.invalid || loading"
+          >
+            <mat-icon>save</mat-icon>
+            Save Address
+          </button>
+
+          <!-- mat-grid-list below address button -->
+          <div style="margin-top: 20px;">
+            <mat-grid-list cols="5" rowHeight="100px">
+              <!-- <mat-grid-tile *ngFor="let addr of savedAddresses; let i = index">
+                <div style="text-align: center; width: 100%;">
+                  <strong>Address {{ i + 1 }}</strong><br />
+                  Country: {{ addr.countryId }}<br />
+                  State: {{ addr.stateId }}<br />
+                  City: {{ addr.cityId }}<br />
+                  Street: {{ addr.street }}<br />
+                  Zip: {{ addr.zipCode }}
+                </div>
+              </mat-grid-tile> -->
+            </mat-grid-list>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <!-- Card Actions -->
+    <mat-card-actions>
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="onClear()"
+        [disabled]="loading"
+      >
+        <mat-icon>clear</mat-icon>
+        Cancel
+      </button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        (click)="onSubmit()"
+        [disabled]="registrationForm.invalid || loading"
+      >
+        <mat-icon *ngIf="!loading">save</mat-icon>
+        <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+        {{ loading ? 'Registering...' : 'Register' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
